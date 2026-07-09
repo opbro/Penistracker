@@ -3,32 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Goal Tracker</title>
+<title>Goal Tracker 🍆</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --hot1: #ff416c;
+    --hot2: #ff4b2b;
+    --gold: #ffbe76;
+    --amber: #ff9f43;
+    --violet: #7f5af0;
+    --green: #2cb67d;
+    --card: rgba(255,255,255,.06);
+    --card-border: rgba(255,255,255,.1);
+  }
 
   body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-attachment: fixed;
     font-family: 'Nunito', sans-serif;
     color: #fff;
     overflow-x: hidden;
-    padding: 20px;
+    padding: 28px 20px 60px;
   }
 
   h1 {
     font-family: 'Bangers', cursive;
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     letter-spacing: 4px;
-    background: linear-gradient(90deg, #ff416c, #ff4b2b, #ffbe76);
+    background: linear-gradient(90deg, var(--hot1), var(--hot2), var(--gold));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     text-align: center;
     filter: drop-shadow(0 0 20px rgba(255,65,108,.4));
   }
@@ -36,26 +49,49 @@
   .subtitle {
     font-size: 1rem;
     opacity: .6;
-    margin-bottom: 30px;
+    margin-bottom: 8px;
     text-align: center;
   }
+
+  /* editable goal title */
+  .goal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    background: transparent;
+    border: none;
+    border-bottom: 2px dashed rgba(255,190,118,.35);
+    text-align: center;
+    padding: 4px 10px;
+    margin-bottom: 24px;
+    outline: none;
+    max-width: 90vw;
+    transition: border-color .2s;
+  }
+  .goal-title:focus { border-bottom-color: var(--gold); }
+  .goal-title::placeholder { color: rgba(255,190,118,.4); }
 
   .tracker-container {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    gap: 30px;
+    gap: 34px;
     width: 100%;
-    max-width: 700px;
+    max-width: 860px;
   }
 
-  /* ── Penis Thermometer ── */
+  /* ── Thermometer ── */
   .thermo-svg-wrap {
     position: relative;
     width: min(220px, 55vw);
     height: auto;
     aspect-ratio: 220 / 480;
+    transition: transform .8s cubic-bezier(.34,1.56,.64,1);
+    transform-origin: 50% 90%;
+    flex-shrink: 0;
+    margin-top: 10px;
   }
 
   .thermo-svg-wrap svg {
@@ -71,37 +107,38 @@
 
   .pct-label {
     position: absolute;
-    right: -10px;
+    right: -14px;
     font-family: 'Bangers', cursive;
     font-size: clamp(1.2rem, 4vw, 1.8rem);
-    color: #ffbe76;
+    color: var(--gold);
     text-shadow: 0 0 10px rgba(255,190,118,.5);
     transition: bottom .8s cubic-bezier(.34,1.56,.64,1);
     white-space: nowrap;
     pointer-events: none;
   }
 
-  /* ── Controls ── */
-  .controls {
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
+  /* ── Panels ── */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--card-border);
     border-radius: 20px;
-    padding: 25px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: min(320px, 90vw);
+    padding: 22px 20px;
     backdrop-filter: blur(10px);
+    width: min(340px, 92vw);
   }
 
-  .control-row {
+  .right-col {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 20px;
   }
+
+  .controls { display: flex; flex-direction: column; gap: 14px; }
+
+  .control-row { display: flex; flex-direction: column; gap: 6px; }
 
   .control-row label {
-    font-size: .8rem;
+    font-size: .75rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     opacity: .6;
@@ -117,62 +154,182 @@
     font-size: 1.1rem;
     font-weight: 700;
     outline: none;
-    transition: border .2s;
+    transition: border .2s, box-shadow .2s;
+    width: 100%;
   }
 
   .control-row input:focus {
-    border-color: #ff416c;
+    border-color: var(--hot1);
     box-shadow: 0 0 12px rgba(255,65,108,.3);
   }
 
-  .amounts-display {
-    text-align: center;
-    font-size: 1.1rem;
-    padding: 8px 0;
-  }
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+  .amounts-display { text-align: center; font-size: 1.05rem; padding: 2px 0 8px; }
 
   .amounts-display .current {
     font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    color: #ff9f43;
+    font-size: 2.2rem;
+    color: var(--amber);
+    transition: transform .2s;
   }
+  .amounts-display .current.bump { animation: bump .35s ease; }
+  @keyframes bump { 40% { transform: scale(1.18); } }
 
   .amounts-display .goal-amount { opacity: .5; }
+  .amounts-display .remaining { font-size: .85rem; opacity: .55; margin-top: 2px; }
+
+  /* progress bar under numbers (secondary readout) */
+  .mini-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,.1);
+    overflow: hidden;
+    margin: 8px 0 2px;
+  }
+  .mini-bar > div {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--hot1), var(--amber));
+    transition: width .8s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* quick chips */
+  .chips { display: flex; gap: 8px; }
+  .chip {
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: .95rem;
+    padding: 8px 0;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 10px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .chip:hover { background: rgba(255,65,108,.25); }
+  .chip:active { transform: scale(.95); }
 
   button {
     font-family: 'Bangers', cursive;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     letter-spacing: 2px;
     padding: 12px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform .15s, box-shadow .2s;
+    color: #fff;
+    transition: transform .15s, box-shadow .2s, opacity .2s;
   }
-
   button:active { transform: scale(.96); }
+  button:focus-visible, input:focus-visible, .chip:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
 
   .btn-add {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
+    background: linear-gradient(135deg, var(--hot1), var(--hot2));
     box-shadow: 0 4px 20px rgba(255,65,108,.4);
   }
-
   .btn-add:hover { box-shadow: 0 6px 30px rgba(255,65,108,.6); }
 
   .btn-set {
-    background: linear-gradient(135deg, #7f5af0, #2cb67d);
-    color: #fff;
+    background: linear-gradient(135deg, var(--violet), var(--green));
     box-shadow: 0 4px 20px rgba(127,90,240,.3);
+    font-size: 1.05rem;
   }
 
-  .btn-reset {
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .btn-ghost {
     background: rgba(255,255,255,.08);
-    color: rgba(255,255,255,.5);
+    color: rgba(255,255,255,.55);
     font-size: 1rem;
   }
+  .btn-ghost:hover { color: #fff; }
+  .btn-ghost:disabled { opacity: .3; cursor: not-allowed; }
 
-  .btn-reset:hover { color: #fff; }
+  .sound-toggle {
+    position: fixed;
+    top: 14px; right: 14px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 1.2rem;
+    display: grid;
+    place-items: center;
+    z-index: 50;
+    padding: 0;
+  }
+
+  /* ── History ── */
+  .history h2 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 10px;
+  }
+  .history ul {
+    list-style: none;
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    scrollbar-width: thin;
+  }
+  .history li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    background: rgba(255,255,255,.05);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: .9rem;
+    animation: slideIn .3s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } }
+  .history li .amt { font-weight: 900; color: var(--amber); }
+  .history li .amt.neg { color: #48dbfb; }
+  .history li .when { opacity: .45; font-size: .75rem; }
+  .history .empty { opacity: .4; font-size: .9rem; text-align: center; padding: 12px 0; }
+
+  /* ── Toasts ── */
+  .toast-stack {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 1001;
+    pointer-events: none;
+    width: max-content;
+    max-width: 92vw;
+  }
+  .toast {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 1.5px;
+    font-size: 1.15rem;
+    background: linear-gradient(135deg, rgba(255,65,108,.92), rgba(255,159,67,.92));
+    padding: 10px 22px;
+    border-radius: 999px;
+    box-shadow: 0 6px 30px rgba(255,65,108,.5);
+    animation: toastIn 3.2s ease forwards;
+    text-align: center;
+  }
+  @keyframes toastIn {
+    0% { opacity: 0; transform: translateY(20px) scale(.8); }
+    10%, 82% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-14px) scale(.9); }
+  }
 
   /* ── Goal hit ── */
   .goal-hit-text {
@@ -181,8 +338,9 @@
     transform: translate(-50%, -50%) scale(0);
     font-family: 'Bangers', cursive;
     font-size: clamp(3rem, 10vw, 7rem);
-    background: linear-gradient(90deg, #ff416c, #ffbe76, #ff416c);
+    background: linear-gradient(90deg, var(--hot1), var(--gold), var(--hot1));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     z-index: 1000;
     pointer-events: none;
@@ -191,7 +349,6 @@
     line-height: 1.1;
     filter: drop-shadow(0 0 40px rgba(255,65,108,.8));
   }
-
   .goal-hit-text.show { animation: goalPop 2.5s ease forwards; }
 
   @keyframes goalPop {
@@ -204,20 +361,23 @@
 
   #confetti {
     position: fixed;
-    top: 0; left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     pointer-events: none;
     z-index: 999;
   }
 
-  .thermo-svg-wrap.pulse svg {
-    animation: svgPulse 1s ease infinite;
-  }
+  .thermo-svg-wrap.pulse svg { animation: svgPulse 1s ease infinite; }
+  .thermo-svg-wrap.throb svg { animation: svgThrob .6s ease infinite; }
 
   @keyframes svgPulse {
     0%,100% { filter: drop-shadow(0 0 25px rgba(255,100,130,.35)); }
     50% { filter: drop-shadow(0 0 50px rgba(255,65,108,.9)) drop-shadow(0 0 80px rgba(255,75,43,.4)); }
+  }
+  @keyframes svgThrob {
+    0%,100% { filter: drop-shadow(0 0 30px rgba(255,65,108,.6)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 70px rgba(255,65,108,1)); transform: scale(1.02); }
   }
 
   @keyframes shake {
@@ -232,17 +392,31 @@
     80% { transform: translate(2px, -4px); }
     90% { transform: translate(-1px, 1px); }
   }
+
+  .save-note {
+    margin-top: 22px;
+    font-size: .75rem;
+    opacity: .35;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
 </style>
 </head>
 <body>
 
+<button class="sound-toggle" id="soundToggle" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+
 <h1>GOAL TRACKER!</h1>
 <p class="subtitle">Set your goal, track your progress, and watch it explode!</p>
+<input class="goal-title" id="goalTitle" maxlength="40" placeholder="Name your goal…" aria-label="Goal name">
 
 <div class="tracker-container">
 
-  <div class="thermo-svg-wrap" id="thermoWrap">
-    <svg viewBox="0 0 220 480" xmlns="http://www.w3.org/2000/svg">
+  <div class="thermo-svg-wrap" id="thermoWrap" role="img" aria-label="Progress thermometer">
+    <svg viewBox="0 0 220 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stop-color="#f4c2a1"/>
@@ -278,7 +452,7 @@
         <rect id="fillShine" x="82" y="370" width="14" height="0" rx="7" fill="rgba(255,255,255,.25)"/>
       </g>
 
-      <!-- Vein details on shaft -->
+      <!-- Vein details -->
       <path d="M100,340 Q95,280 105,220 Q98,180 102,130" fill="none" stroke="rgba(160,100,80,.2)" stroke-width="2.5" stroke-linecap="round"/>
       <path d="M125,350 Q130,300 120,240 Q128,190 122,140" fill="none" stroke="rgba(160,100,80,.15)" stroke-width="1.8" stroke-linecap="round"/>
 
@@ -299,7 +473,6 @@
         <line x1="155" y1="370" x2="172" y2="370"/>
       </g>
 
-      <!-- Percentage labels along ticks -->
       <g font-family="Nunito, sans-serif" font-size="11" fill="rgba(255,255,255,.35)">
         <text x="176" y="374">0%</text>
         <text x="176" y="283">33%</text>
@@ -307,140 +480,361 @@
         <text x="176" y="104">100%</text>
       </g>
     </svg>
-    <div class="pct-label" id="pctLabel" style="bottom:18%;">0%</div>
+    <div class="pct-label" id="pctLabel" style="bottom:18%;" aria-live="polite">0%</div>
   </div>
 
-  <div class="controls">
-    <div class="amounts-display">
-      <div class="current" id="currentDisplay">$0</div>
-      <div class="goal-amount">of <span id="goalDisplay">$1,000</span></div>
+  <div class="right-col">
+    <div class="panel controls">
+      <div class="amounts-display">
+        <div class="current" id="currentDisplay">$0</div>
+        <div class="goal-amount">of <span id="goalDisplay">$1,000</span></div>
+        <div class="mini-bar"><div id="miniBarFill"></div></div>
+        <div class="remaining" id="remainingDisplay">$1,000 to go</div>
+      </div>
+
+      <div class="control-row">
+        <label for="goalInput">Goal Amount ($)</label>
+        <input type="number" id="goalInput" value="1000" min="1" step="1" inputmode="decimal">
+      </div>
+
+      <div class="control-row">
+        <label for="addInput">Add Progress ($)</label>
+        <input type="number" id="addInput" placeholder="e.g. 50" min="0" step="1" inputmode="decimal">
+      </div>
+
+      <div class="chips" role="group" aria-label="Quick add amounts">
+        <button class="chip" data-add="10">+$10</button>
+        <button class="chip" data-add="25">+$25</button>
+        <button class="chip" data-add="50">+$50</button>
+        <button class="chip" data-add="100">+$100</button>
+      </div>
+
+      <button class="btn-add" id="btnAdd">ADD PROGRESS 🍆</button>
+
+      <div class="control-row">
+        <label for="setInput">Or set current total ($)</label>
+        <input type="number" id="setInput" placeholder="e.g. 500" min="0" step="1" inputmode="decimal">
+      </div>
+      <button class="btn-set" id="btnSet">SET TOTAL</button>
+
+      <div class="row-2">
+        <button class="btn-ghost" id="btnUndo" disabled>↩ UNDO</button>
+        <button class="btn-ghost" id="btnReset">RESET</button>
+      </div>
     </div>
 
-    <div class="control-row">
-      <label>Goal Amount ($)</label>
-      <input type="number" id="goalInput" value="1000" min="1" step="1">
+    <div class="panel history">
+      <h2>RECENT ACTION 📈</h2>
+      <ul id="historyList"><li class="empty">Nothing yet. Get pumping.</li></ul>
     </div>
-
-    <div class="control-row">
-      <label>Add Progress ($)</label>
-      <input type="number" id="addInput" placeholder="e.g. 50" min="0" step="1">
-    </div>
-
-    <button class="btn-add" onclick="addProgress()">ADD PROGRESS 🍆</button>
-
-    <div class="control-row">
-      <label>Or set current total ($)</label>
-      <input type="number" id="setInput" placeholder="e.g. 500" min="0" step="1">
-    </div>
-
-    <button class="btn-set" onclick="setProgress()">SET TOTAL</button>
-
-    <button class="btn-reset" onclick="resetProgress()">RESET</button>
   </div>
 </div>
 
+<p class="save-note" id="saveNote"></p>
+
 <div class="goal-hit-text" id="goalText">💦 GOAL<br>REACHED! 💦</div>
+<div class="toast-stack" id="toastStack"></div>
 <canvas id="confetti"></canvas>
 
 <script>
-  let currentAmount = 0;
-  let goalAmount = 1000;
+(() => {
+  'use strict';
 
-  const SHAFT_TOP = 60;
-  const SHAFT_BOTTOM = 370;
+  /* ═══════ State ═══════ */
+  const state = {
+    current: 0,
+    goal: 1000,
+    title: '',
+    history: [],      // { amount, total, ts }  (amount may be negative for corrections)
+    milestones: {},   // { "25": true, ... }
+    exploded: false,
+    sound: true
+  };
+
+  const SHAFT_TOP = 60, SHAFT_BOTTOM = 370;
   const SHAFT_HEIGHT = SHAFT_BOTTOM - SHAFT_TOP;
+  const MAX_HISTORY = 50;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function formatMoney(n) {
-    return '$' + n.toLocaleString();
+  const MILESTONES = [
+    { pct: 25,  msg: "25%! It's getting warmed up 🔥" },
+    { pct: 50,  msg: "HALFWAY! Standing at attention 🫡" },
+    { pct: 69,  msg: "69%. Nice. 😏" },
+    { pct: 75,  msg: "75%! It can't hold much longer… 🌋" },
+    { pct: 90,  msg: "90%!! BRACE FOR IMPACT 🚨" }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const els = {
+    wrap: $('thermoWrap'), fillRect: $('fillRect'), fillShine: $('fillShine'),
+    pctLabel: $('pctLabel'), current: $('currentDisplay'), goal: $('goalDisplay'),
+    remaining: $('remainingDisplay'), miniBar: $('miniBarFill'),
+    goalInput: $('goalInput'), addInput: $('addInput'), setInput: $('setInput'),
+    goalTitle: $('goalTitle'), historyList: $('historyList'),
+    btnUndo: $('btnUndo'), goalText: $('goalText'), toastStack: $('toastStack'),
+    soundToggle: $('soundToggle'), saveNote: $('saveNote')
+  };
+
+  /* ═══════ Persistence (works in Claude artifacts; falls back to in-memory) ═══════ */
+  const STORE_KEY = 'goal-tracker-state';
+  const hasStorage = typeof window.storage !== 'undefined';
+
+  async function saveState() {
+    if (!hasStorage) return;
+    try { await window.storage.set(STORE_KEY, JSON.stringify(state)); } catch (e) { /* non-fatal */ }
+  }
+  const saveStateDebounced = debounce(saveState, 400);
+
+  async function loadState() {
+    if (!hasStorage) {
+      els.saveNote.textContent = 'Heads up: progress lives in this tab only — refresh wipes it.';
+      return;
+    }
+    try {
+      const res = await window.storage.get(STORE_KEY);
+      if (res && res.value) Object.assign(state, JSON.parse(res.value));
+      els.saveNote.textContent = 'Progress auto-saves. Come back anytime. 😉';
+    } catch (e) {
+      els.saveNote.textContent = 'Progress auto-saves. Come back anytime. 😉';
+    }
   }
 
-  function updateThermometer() {
-    goalAmount = Math.max(1, parseInt(document.getElementById('goalInput').value) || 1000);
-    const pct = Math.min(100, (currentAmount / goalAmount) * 100);
+  function debounce(fn, ms) {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
 
-    const fillH = (pct / 100) * SHAFT_HEIGHT;
+  /* ═══════ Helpers ═══════ */
+  const fmt = n => '$' + Math.round(n).toLocaleString();
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pctOf = () => state.goal > 0 ? (state.current / state.goal) * 100 : 0;
+
+  function parseInput(el) {
+    const v = parseFloat(el.value);
+    return isNaN(v) ? null : v;
+  }
+
+  /* ═══════ Render ═══════ */
+  function render(opts = {}) {
+    const pct = pctOf();
+    const clamped = Math.min(100, Math.max(0, pct));
+
+    // SVG fill
+    const fillH = (clamped / 100) * SHAFT_HEIGHT;
     const fillY = SHAFT_BOTTOM - fillH;
+    els.fillRect.setAttribute('y', fillY);
+    els.fillRect.setAttribute('height', fillH);
+    els.fillShine.setAttribute('y', fillY);
+    els.fillShine.setAttribute('height', fillH);
 
-    document.getElementById('fillRect').setAttribute('y', fillY);
-    document.getElementById('fillRect').setAttribute('height', fillH);
-    document.getElementById('fillShine').setAttribute('y', fillY);
-    document.getElementById('fillShine').setAttribute('height', fillH);
+    // % label rides the fill line
+    els.pctLabel.style.bottom = (18 + (clamped / 100) * 62) + '%';
+    els.pctLabel.textContent = Math.round(pct) + '%';
 
-    // Position % label (percentage-based so it scales)
-    const labelBottomPct = 18 + (pct / 100) * 62;
-    const pctLabel = document.getElementById('pctLabel');
-    pctLabel.style.bottom = labelBottomPct + '%';
-    pctLabel.textContent = Math.round(pct) + '%';
-
-    document.getElementById('currentDisplay').textContent = formatMoney(currentAmount);
-    document.getElementById('goalDisplay').textContent = formatMoney(goalAmount);
-
-    const wrap = document.getElementById('thermoWrap');
-    if (pct >= 80 && pct < 100) {
-      wrap.classList.add('pulse');
-    } else {
-      wrap.classList.remove('pulse');
+    // It grows with progress. Of course it does.
+    if (!reducedMotion) {
+      els.wrap.style.transform = 'scale(' + (0.88 + (clamped / 100) * 0.17) + ')';
     }
 
-    if (currentAmount >= goalAmount && goalAmount > 0) {
-      triggerExplosion();
+    // Numbers
+    els.current.textContent = fmt(state.current);
+    els.goal.textContent = fmt(state.goal);
+    els.miniBar.style.width = clamped + '%';
+    const left = state.goal - state.current;
+    els.remaining.textContent = left > 0
+      ? fmt(left) + ' to go'
+      : 'Goal smashed' + (left < 0 ? ' — ' + fmt(-left) + ' over! 🥵' : '! 🎉');
+
+    if (opts.bump) {
+      els.current.classList.remove('bump');
+      void els.current.offsetWidth;
+      els.current.classList.add('bump');
     }
+
+    // Glow states
+    els.wrap.classList.toggle('pulse', pct >= 80 && pct < 100);
+    els.wrap.classList.toggle('throb', pct >= 100 && !reducedMotion);
+
+    // Inputs reflect state
+    if (document.activeElement !== els.goalInput) els.goalInput.value = state.goal;
+
+    renderHistory();
+    els.btnUndo.disabled = state.history.length === 0;
+    saveStateDebounced();
+  }
+
+  function renderHistory() {
+    els.historyList.innerHTML = '';
+    if (state.history.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = 'Nothing yet. Get pumping.';
+      els.historyList.appendChild(li);
+      return;
+    }
+    [...state.history].reverse().forEach(entry => {
+      const li = document.createElement('li');
+      const amt = document.createElement('span');
+      amt.className = 'amt' + (entry.amount < 0 ? ' neg' : '');
+      amt.textContent = (entry.amount >= 0 ? '+' : '−') + '$' + Math.abs(Math.round(entry.amount)).toLocaleString();
+      const when = document.createElement('span');
+      when.className = 'when';
+      when.textContent = new Date(entry.ts).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      li.appendChild(amt);
+      li.appendChild(when);
+      els.historyList.appendChild(li);
+    });
+  }
+
+  /* ═══════ Actions ═══════ */
+  function applyChange(delta) {
+    if (!delta || delta === 0) return;
+    const prevPct = pctOf();
+    state.current = Math.max(0, state.current + delta);
+    state.history.push({ amount: delta, total: state.current, ts: Date.now() });
+    if (state.history.length > MAX_HISTORY) state.history.shift();
+    render({ bump: true });
+    checkMilestones(prevPct);
+    playPop();
   }
 
   function addProgress() {
-    const val = parseFloat(document.getElementById('addInput').value) || 0;
-    if (val <= 0) return;
-    currentAmount += val;
-    document.getElementById('addInput').value = '';
-    updateThermometer();
+    const v = parseInput(els.addInput);
+    els.addInput.value = '';
+    if (v === null || v <= 0) return;
+    applyChange(v);
   }
 
-  function setProgress() {
-    const val = parseFloat(document.getElementById('setInput').value);
-    if (isNaN(val) || val < 0) return;
-    currentAmount = val;
-    document.getElementById('setInput').value = '';
-    updateThermometer();
+  function setTotal() {
+    const v = parseInput(els.setInput);
+    els.setInput.value = '';
+    if (v === null || v < 0) return;
+    applyChange(v - state.current);
   }
 
-  function resetProgress() {
-    currentAmount = 0;
-    exploded = false;
-    updateThermometer();
+  function undo() {
+    const last = state.history.pop();
+    if (!last) return;
+    state.current = Math.max(0, state.current - last.amount);
+    if (pctOf() < 100) {
+      state.exploded = false;
+      // re-arm milestones above current pct
+      for (const m of MILESTONES) if (pctOf() < m.pct) delete state.milestones[m.pct];
+    }
+    render({ bump: true });
+    toast('Undone. We never speak of it again. 🤐');
   }
 
-  document.getElementById('goalInput').addEventListener('change', updateThermometer);
-  document.getElementById('addInput').addEventListener('keydown', e => { if (e.key === 'Enter') addProgress(); });
-  document.getElementById('setInput').addEventListener('keydown', e => { if (e.key === 'Enter') setProgress(); });
+  function reset() {
+    state.current = 0;
+    state.history = [];
+    state.milestones = {};
+    state.exploded = false;
+    render();
+    toast('Fresh start. Back to flaccid— er, zero. 📉');
+  }
 
-  /* ═══════ EXPLOSION ═══════ */
-  let exploded = false;
+  function changeGoal() {
+    const v = parseInput(els.goalInput);
+    state.goal = Math.max(1, v || 1000);
+    // re-arm anything now un-hit
+    for (const m of MILESTONES) if (pctOf() < m.pct) delete state.milestones[m.pct];
+    if (pctOf() < 100) state.exploded = false;
+    render();
+  }
 
+  function checkMilestones(prevPct) {
+    const pct = pctOf();
+    for (const m of MILESTONES) {
+      if (pct >= m.pct && prevPct < m.pct && !state.milestones[m.pct]) {
+        state.milestones[m.pct] = true;
+        toast(m.msg);
+        playChime(m.pct);
+        burstAtThermo(20 + m.pct / 2);
+      }
+    }
+    if (pct >= 100 && !state.exploded) triggerExplosion();
+  }
+
+  /* ═══════ Toasts ═══════ */
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = msg;
+    els.toastStack.appendChild(el);
+    setTimeout(() => el.remove(), 3300);
+  }
+
+  /* ═══════ Sound (tiny synth, no assets) ═══════ */
+  let audioCtx = null;
+  function ctxAudio() {
+    if (!state.sound) return null;
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+  function tone(freq, dur, type, vol, when) {
+    const ac = ctxAudio();
+    if (!ac) return;
+    const t = ac.currentTime + (when || 0);
+    const osc = ac.createOscillator(), g = ac.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(vol || .12, t);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    osc.connect(g).connect(ac.destination);
+    osc.start(t);
+    osc.stop(t + dur);
+  }
+  function playPop() { tone(rand(500, 700), .12, 'triangle', .1); }
+  function playChime(pct) {
+    const base = 300 + pct * 3;
+    [0, .09, .18].forEach((d, i) => tone(base * (1 + i * .25), .25, 'sine', .12, d));
+  }
+  function playFanfare() {
+    const notes = [523, 659, 784, 1047, 784, 1047, 1319];
+    notes.forEach((f, i) => tone(f, .3, 'square', .08, i * .11));
+    tone(80, .5, 'sawtooth', .15, 0); // thump
+  }
+
+  els.soundToggle.addEventListener('click', () => {
+    state.sound = !state.sound;
+    els.soundToggle.textContent = state.sound ? '🔊' : '🔇';
+    saveStateDebounced();
+    if (state.sound) playPop();
+  });
+
+  /* ═══════ Explosion ═══════ */
   function triggerExplosion() {
-    if (exploded) return;
-    exploded = true;
-
-    const gt = document.getElementById('goalText');
-    gt.classList.add('show');
-    setTimeout(() => gt.classList.remove('show'), 3000);
-
+    state.exploded = true;
+    els.goalText.classList.add('show');
+    setTimeout(() => els.goalText.classList.remove('show'), 3000);
     launchConfetti();
     launchSquirt();
-
-    document.body.style.animation = 'none';
-    document.body.offsetHeight;
-    document.body.style.animation = 'shake .5s ease';
+    playFanfare();
+    if (!reducedMotion) {
+      document.body.style.animation = 'none';
+      void document.body.offsetHeight;
+      document.body.style.animation = 'shake .5s ease';
+    }
   }
 
-  /* ── Canvas Particles ── */
-  const canvas = document.getElementById('confetti');
+  /* ═══════ Canvas particles ═══════ */
+  const canvas = $('confetti');
   const ctx = canvas.getContext('2d');
   let particles = [];
   let animating = false;
+  const MAX_PARTICLES = 900;
 
   function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
@@ -448,9 +842,12 @@
   const COLORS = ['#ff416c','#ff4b2b','#ffbe76','#7f5af0','#2cb67d','#f9ca24','#ff6b6b','#48dbfb','#ff9ff3','#e6e6e6'];
   const WHITES = ['#ffffff','#f0f0ff','#e8e0f0','#ffffffdd','#f5f5ff','#ffffffaa'];
 
-  function rand(a, b) { return a + Math.random() * (b - a); }
+  function pushParticle(p) {
+    if (particles.length >= MAX_PARTICLES) particles.shift();
+    particles.push(p);
+  }
 
-  function makeParticle(x, y, colors, spdMin, spdMax, szMin, szMax, grav, dec) {
+  function makeParticle(x, y, colors, spdMin, spdMax, szMin, szMax) {
     const angle = rand(0, Math.PI * 2);
     const speed = rand(spdMin, spdMax);
     return {
@@ -462,92 +859,101 @@
       color: colors[Math.floor(Math.random() * colors.length)],
       rotation: rand(0, 360),
       rotationSpeed: rand(-10, 10),
-      gravity: grav || 0.15,
-      drag: 0.98,
-      opacity: 1,
-      life: 1,
-      decay: rand(dec || 0.005, (dec || 0.005) * 3)
+      gravity: .15, drag: .98,
+      opacity: 1, life: 1,
+      decay: rand(.005, .015)
     };
   }
 
+  function startAnim() { if (!animating) { animating = true; requestAnimationFrame(animate); } }
+
   function launchConfetti() {
-    const cx = canvas.width / 2, cy = canvas.height / 2;
-    for (let i = 0; i < 250; i++)
-      particles.push(makeParticle(cx + rand(-50,50), cy + rand(-50,50), COLORS, 4, 16, 4, 10));
-    for (let i = 0; i < 80; i++)
-      particles.push(makeParticle(rand(0, canvas.width), canvas.height + 10, COLORS, 4, 16, 4, 10));
-    if (!animating) { animating = true; animate(); }
+    if (reducedMotion) return;
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    for (let i = 0; i < 250; i++) pushParticle(makeParticle(cx + rand(-50, 50), cy + rand(-50, 50), COLORS, 4, 16, 4, 10));
+    for (let i = 0; i < 80; i++) pushParticle(makeParticle(rand(0, window.innerWidth), window.innerHeight + 10, COLORS, 4, 16, 4, 10));
+    startAnim();
+  }
+
+  function burstAtThermo(count) {
+    if (reducedMotion) return;
+    const r = els.wrap.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    for (let i = 0; i < count; i++) pushParticle(makeParticle(x, y, COLORS, 2, 9, 3, 7));
+    startAnim();
   }
 
   function launchSquirt() {
-    const wrap = document.getElementById('thermoWrap');
-    const rect = wrap.getBoundingClientRect();
-    const tipX = rect.left + rect.width * (110 / 220);
-    const tipY = rect.top + rect.height * (15 / 480);
-
-    for (let i = 0; i < 80; i++) {
-      const angle = rand(-Math.PI * 0.85, -Math.PI * 0.15);
+    if (reducedMotion) return;
+    const r = els.wrap.getBoundingClientRect();
+    const tipX = r.left + r.width * (110 / 220);
+    const tipY = r.top + r.height * (15 / 480);
+    for (let i = 0; i < 90; i++) {
+      const angle = rand(-Math.PI * .85, -Math.PI * .15);
       const speed = rand(8, 28);
-      particles.push({
-        x: tipX + rand(-5, 5),
-        y: tipY,
-        vx: Math.cos(angle) * speed * rand(0.5, 1.5),
+      pushParticle({
+        x: tipX + rand(-5, 5), y: tipY,
+        vx: Math.cos(angle) * speed * rand(.5, 1.5),
         vy: Math.sin(angle) * speed,
-        size: rand(3, 9),
-        shape: 'circle',
+        size: rand(3, 9), shape: 'circle',
         color: WHITES[Math.floor(Math.random() * WHITES.length)],
         rotation: 0, rotationSpeed: 0,
-        gravity: 0.22,
-        drag: 0.97,
-        opacity: 1,
-        life: 1,
-        decay: rand(0.008, 0.022)
+        gravity: .22, drag: .97,
+        opacity: 1, life: 1,
+        decay: rand(.008, .022)
       });
     }
-    if (!animating) { animating = true; animate(); }
+    startAnim();
   }
 
   function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
-      p.vx *= p.drag;
-      p.vy *= p.drag;
-      p.vy += p.gravity;
-      p.x += p.vx;
-      p.y += p.vy;
+      p.vx *= p.drag; p.vy *= p.drag; p.vy += p.gravity;
+      p.x += p.vx; p.y += p.vy;
       p.rotation += p.rotationSpeed;
       p.life -= p.decay;
       p.opacity = p.life;
-
       if (p.life <= 0) { particles.splice(i, 1); continue; }
 
       ctx.save();
       ctx.globalAlpha = p.opacity;
       ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.rotate(p.rotation * Math.PI / 180);
       ctx.fillStyle = p.color;
-
-      if (p.shape === 'rect') {
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
-      } else {
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      if (p.shape === 'rect') ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * .6);
+      else { ctx.beginPath(); ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2); ctx.fill(); }
       ctx.restore();
     }
-
-    if (particles.length > 0) {
-      requestAnimationFrame(animate);
-    } else {
-      animating = false;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    if (particles.length > 0) requestAnimationFrame(animate);
+    else { animating = false; ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); }
   }
 
-  updateThermometer();
+  /* ═══════ Wiring ═══════ */
+  $('btnAdd').addEventListener('click', addProgress);
+  $('btnSet').addEventListener('click', setTotal);
+  $('btnReset').addEventListener('click', reset);
+  els.btnUndo.addEventListener('click', undo);
+  els.goalInput.addEventListener('change', changeGoal);
+  els.addInput.addEventListener('keydown', e => { if (e.key === 'Enter') addProgress(); });
+  els.setInput.addEventListener('keydown', e => { if (e.key === 'Enter') setTotal(); });
+  els.goalTitle.addEventListener('input', debounce(() => {
+    state.title = els.goalTitle.value;
+    saveStateDebounced();
+  }, 300));
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => applyChange(parseFloat(chip.dataset.add)));
+  });
+
+  /* ═══════ Boot ═══════ */
+  (async () => {
+    await loadState();
+    els.goalTitle.value = state.title || '';
+    els.soundToggle.textContent = state.sound ? '🔊' : '🔇';
+    render();
+  })();
+})();
 </script>
 </body>
 </html>
